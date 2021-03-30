@@ -1,0 +1,267 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Solid Documentation",
+        "description": "This is an API Solid",
+        "version": "1.0.0",
+        "contact": {
+        "email": "lucas@rocketseat.com.br"
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["User"],
+                "summary": "Create an user",
+                "description": "Create a new user",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "body",
+                        "required": true,
+                        "description": "Username"
+                    },
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "description": "User email"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": "#/definitions/User",
+                                "example": {
+                                    "name": "Name example",
+                                    "email": "email_example@email.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                              "schema": {
+                                "$ref": "#/definitions/User"
+                              }
+                            }
+                          }
+                    },
+                    "400": {
+                        "description": "The email is already in use",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "The email is already in use"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["User"],
+                "summary": "List all users",
+                "description": "List all users",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "type": "string",
+                        "in": "header",
+                        "required": true,
+                        "description": "Administrator user id to list all users"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "array",
+                                "$ref": "#/definitions/User"
+                              }
+                            }
+                          }
+                    },
+                    "400": {
+                        "description": "User is not an admin",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User is not an admin"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": ["User"],
+                "summary": "List a user",
+                "description": "List a user",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "type": "string",
+                        "in": "path",
+                        "required": true,
+                        "description": "User id to search"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "$ref": "#/definitions/User"
+                              }
+                            }
+                          }
+                    },
+                    "404": {
+                        "description": "User does not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User does not exists"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "tags": ["User"],
+                "summary": "Turn user admin",
+                "description": "Make a user an administrator",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "type": "string",
+                        "in": "path",
+                        "required": true,
+                        "description": "User id that will become an administrator"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "$ref": "#/definitions/UserAdmin"
+                              }
+                            }
+                          }
+                    },
+                    "404": {
+                        "description": "User does not exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User does not exists"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "93b611a2-da43-4725-b950-a0f9d2b0d23f"
+                },
+                "admin": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Name example"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "name@email.com"
+                },
+                "created_at": {
+                    "type": "date",
+                    "example": "2021-03-30T15:39:16.855Z"
+                },
+                "updated_at": {
+                    "type": "date",
+                    "example": "2021-03-30T15:39:16.855Z"
+                }
+            }
+        },
+        "UserAdmin": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "93b611a2-da43-4725-b950-a0f9d2b0d23f"
+                },
+                "admin": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Name example"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "name@email.com"
+                },
+                "created_at": {
+                    "type": "date",
+                    "example": "2021-03-30T15:39:16.855Z"
+                },
+                "updated_at": {
+                    "type": "date",
+                    "example": "2021-03-30T15:39:16.855Z"
+                }
+            }
+        }
+    }
+}
